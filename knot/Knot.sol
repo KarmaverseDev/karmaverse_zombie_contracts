@@ -48,8 +48,14 @@ contract Knot is SuperAdmin, ERC20PausableUpgradeable {
         if (recipient.isContract()) {
             try IKnotReceiver(recipient).onKnotReceived(_msgSender(), recipient, amount) {
 
-            } catch {
-                revert("transfer to non IKnotReceiver implementer");
+            } catch (bytes memory reason) {
+                if (reason.length == 0) {
+                    // no IKnotReceiver implementer, do nothing
+                } else {
+                    assembly {
+                        revert(add(32, reason), mload(reason))
+                    }
+                }
             }
         }
         return result;

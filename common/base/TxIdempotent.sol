@@ -8,8 +8,10 @@ abstract contract TxIdempotent {
     error TxAlreadySolved(uint64 txId);
 
     modifier idempotent(uint64 txId) {
-        if (txRecords[txId]) revert TxAlreadySolved({txId: txId});
-        txRecords[txId] = true;
+        if (txId > 0) {
+            if (txRecords[txId]) revert TxAlreadySolved({txId: txId});
+            txRecords[txId] = true;
+        }
         _;
     }
 }
