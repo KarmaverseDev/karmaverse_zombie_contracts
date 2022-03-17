@@ -9,12 +9,12 @@ import "./KnotSub.sol";
 contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
 
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
-    uint32 public constant ALLOC_PART_NUM = 9;
+    uint32 public constant ALLOC_PART_NUM = 10;
     uint32 public constant ALLOC_MONTH_NUM = 60;
     uint32 public constant MAX_ALLOC_ACCOUNT_NUM_OF_PART = 100;
     uint32 public constant MAX_ALLOC_ACCOUNT_STOCK = 1000000;
 
-    enum AllocPart { PlayToEarn, StakingRewards, PublicSale, SeedRound, PrivateSale, Community, Team, Advisors, EcosystemFund }
+    enum AllocPart { PlayToEarn, StakingRewards, PublicSale, SeedRound, PrivateSale, Community, Team, Advisors, EcosystemFund, Liquidity }
 
     struct AllocRule {
         uint256 tgeAmount;
@@ -66,8 +66,8 @@ contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
             793800, 793800, 793800, 485100, 485100, 485100, 485100, 485100, 485100, 396900, 396900, 396900,
             396900, 396900, 396900, 0, 0, 0, 0, 0, 0, 0, 0, 0
             ]);
-        _initAllocRule(AllocPart.PublicSale, 945000, [
-            uint256(945000), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        _initAllocRule(AllocPart.PublicSale, 1155000, [
+            uint256(1155000), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -108,9 +108,16 @@ contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
             ]);
-        _initAllocRule(AllocPart.EcosystemFund, 2940000, [
-            uint256(840000), 840000, 840000, 840000, 840000, 840000, 840000, 840000, 840000, 840000, 840000, 840000,
-            840000, 840000, 840000, 840000, 840000, 840000, 0, 0, 0, 0, 0, 0,
+        _initAllocRule(AllocPart.EcosystemFund, 1071000, [
+            uint256(337167), 337166, 337167, 337167, 337166, 337167, 337167, 337166, 337167, 337167, 337166, 337167,
+            337167, 337166, 337167, 337167, 337166, 337167, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]);
+        _initAllocRule(AllocPart.Liquidity, 1050000, [
+            uint256(1050000), 1050000, 1050000, 1050000, 1050000, 1050000, 1050000, 1050000, 1050000, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
