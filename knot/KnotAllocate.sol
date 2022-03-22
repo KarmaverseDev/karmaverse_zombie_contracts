@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "../common/access/SuperAdmin.sol";
@@ -45,7 +45,7 @@ contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
     error SetUpNotReady();
     error InvalidTGETime();
 
-    function initialize(IKnot knotMain_) public initializer {
+    function initialize(IKnot knotMain_) external initializer {
         __SuperAdmin_init_unchained();
         __KnotSub_init_unchained(knotMain_);
         __KnotAllocate_init_unchained();
@@ -128,17 +128,17 @@ contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
         rules[part] = AllocRule({tgeAmount: tgeAmount, monthReleaseAmount: monthReleaseAmount});
     }
 
-    function getAllocRule(AllocPart part) public view returns (uint256, uint256[ALLOC_MONTH_NUM] memory) {
+    function getAllocRule(AllocPart part) external view returns (uint256, uint256[ALLOC_MONTH_NUM] memory) {
         AllocRule storage rule = rules[part];
         return (rule.tgeAmount, rule.monthReleaseAmount);
     }
 
-    function getAllocObjective(AllocPart part) public view returns (address[] memory, uint256[] memory, uint256) {
+    function getAllocObjective(AllocPart part) external view returns (address[] memory, uint256[] memory, uint256) {
         AllocObjective storage objective = objectives[part];
         return (objective.accounts, objective.stocks, objective.totalStock);
     }
 
-    function setUpAllocObjective(AllocPart part, address[] calldata accounts, uint256[] calldata stocks) public onlySuperAdmin {
+    function setUpAllocObjective(AllocPart part, address[] calldata accounts, uint256[] calldata stocks) external onlySuperAdmin {
         if (_isTgeDone()) revert TGEDone();
         if (accounts.length != stocks.length) revert InvalidSetUpParam();
         if (accounts.length == 0 || accounts.length > MAX_ALLOC_ACCOUNT_NUM_OF_PART) revert InvalidSetUpParam();
@@ -161,7 +161,7 @@ contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
         return true;
     }
 
-    function tge(uint256 tgeTimestamp_) public onlySuperAdmin {
+    function tge(uint256 tgeTimestamp_) external onlySuperAdmin {
         if (_isTgeDone()) revert TGEDone();
         if (!isSetUpReady()) revert SetUpNotReady();
         if (tgeTimestamp_ == 0) revert InvalidTGETime();
@@ -189,11 +189,11 @@ contract KnotAllocate is SuperAdmin, WhiteList, KnotSub {
         }
     }
 
-    function updateOperatorRole(address account) public onlySuperAdmin {
+    function updateOperatorRole(address account) external onlySuperAdmin {
         _updateRole(OPERATOR_ROLE, account);
     }
 
-    function monthRelease() public whiteList(OPERATOR_ROLE) {
+    function monthRelease() external whiteList(OPERATOR_ROLE) {
         if (!_isTgeDone()) revert ReleaseTimeNotReady();
         if (block.timestamp < monthReleaseTimestamp) revert ReleaseTimeNotReady();
         if (releasedMonthNum >= ALLOC_MONTH_NUM) revert MonthReleaseDone();

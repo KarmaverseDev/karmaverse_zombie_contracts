@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
@@ -29,12 +29,12 @@ contract KnotP2EPool is KnotSub, SuperAdmin, IKnotReceiver {
     error InvalidCaller();
     error ExceedProduceLimit();
 
-    function initialize(IKnot knotMain_) public initializer {
+    function initialize(IKnot knotMain_) external initializer {
         __SuperAdmin_init_unchained();
         __KnotSub_init_unchained(knotMain_);
     }
 
-    function applyGamePlayBudget(address contractAddress, uint256 amountPerMonth, uint256 cumulativeAmount, uint256 startTs) public virtual onlySuperAdmin {
+    function applyGamePlayBudget(address contractAddress, uint256 amountPerMonth, uint256 cumulativeAmount, uint256 startTs) external virtual onlySuperAdmin {
         if (!contractAddress.isContract()) revert InvalidContractAddress();
         if (amountPerMonth > 0 && startTs < block.timestamp - BUDGET_TIME_UNIT) revert InvalidTs();
 

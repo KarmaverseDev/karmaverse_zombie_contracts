@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "./SuperAdmin.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
@@ -21,7 +21,7 @@ abstract contract GameAdmin is SuperAdmin {
         _;
     }
 
-    function isGameAdmin(address addr) public view returns (bool) {
+    function isGameAdmin(address addr) external view returns (bool) {
         return gameAdmin == addr;
     }
 

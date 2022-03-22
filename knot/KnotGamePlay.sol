@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
@@ -40,15 +40,16 @@ abstract contract KnotGamePlay is GameAdmin, KnotSub, ClaimTimer, IKnotReceiver,
     }
 
     function __KnotGamePlay_init_unchained(KnotP2EPool p2ePool_) internal onlyInitializing {
+        require(address(p2ePool_) != address(0), "address must be non-zero");
         p2ePool = p2ePool_;
     }
 
-    function changeCommunityFundAccount(address newAccount) public onlySuperAdmin {
+    function changeCommunityFundAccount(address newAccount) external onlySuperAdmin {
         emit CommunityFuncAccountChanged(communityFundAccount, newAccount);
         communityFundAccount = newAccount;
     }
 
-    function produce(uint256 amount, uint64 timestamp, uint64 txId, string memory reason) public virtual onlyGameAdmin idempotent(txId) {
+    function produce(uint256 amount, uint64 timestamp, uint64 txId, string memory reason) external virtual onlyGameAdmin idempotent(txId) {
         if (amount <= 0) revert IllegalAmount();
 
         p2ePool.produce(amount, timestamp);
@@ -73,14 +74,14 @@ abstract contract KnotGamePlay is GameAdmin, KnotSub, ClaimTimer, IKnotReceiver,
         return verify(signedHash, signature);
     }
 
-    function deposit(address account, uint256 amount) public virtual {
+    function deposit(address account, uint256 amount) external virtual {
         if (amount <= 0) revert IllegalAmount();
 
         SafeERC20Upgradeable.safeTransferFrom(knotMain, account, address(this), amount);
         emit TokenDeposited(account, amount);
     }
 
-    function claimRevenue(uint256 amount, uint64 timestamp, uint64 txId) public virtual onlyGameAdmin idempotent(txId) {
+    function claimRevenue(uint256 amount, uint64 timestamp, uint64 txId) external virtual onlyGameAdmin idempotent(txId) {
         if (amount <= 0) revert IllegalAmount();
         if (communityFundAccount == address(0)) revert InvalidFundAccount();
 

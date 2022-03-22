@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 
@@ -19,7 +19,7 @@ abstract contract SuperAdmin is PausableUpgradeable {
         _;
     }
 
-    function isSuperAdmin(address addr) public view returns (bool) {
+    function isSuperAdmin(address addr) external view returns (bool) {
         return superAdmin == addr;
     }
 

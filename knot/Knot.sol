@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
@@ -21,9 +21,9 @@ contract Knot is SuperAdmin, ERC20PausableUpgradeable {
 
     using AddressUpgradeable for address;
 
-    uint256 internal constant TOTAL_AMOUNT = 210000000e18;
+    uint256 internal constant TOTAL_AMOUNT = 21e25;
 
-    function initialize() public initializer {
+    function initialize() external initializer {
         __ERC20_init_unchained("Karmaverse Knot", "Knot");
         __ERC20Pausable_init();
         __SuperAdmin_init_unchained();
@@ -38,8 +38,8 @@ contract Knot is SuperAdmin, ERC20PausableUpgradeable {
         return 18;
     }
 
-    function setUpAllocateContract(IKnotAllocate allocateContract) public virtual onlySuperAdmin {
-        require(allocateContract.knotMain() == address(this));
+    function setUpAllocateContract(IKnotAllocate allocateContract) external virtual onlySuperAdmin {
+        require(allocateContract.knotMain() == address(this), "invalid allocate contract address");
         _transfer(address(this), address(allocateContract), TOTAL_AMOUNT);
     }
 
